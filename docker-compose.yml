@@ -1,8 +1,8 @@
 services:
-  universidadesPostgres:
+  universidades-postgres:
     image: postgres
-    container_name: universidadesPostgres
-    hostname: universidadesPostgres
+    container_name: universidades-postgres
+    hostname: universidades-postgres
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
@@ -32,7 +32,7 @@ services:
     #command: /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -c standalone-microprofile-jaeger.xml -bmanagement 0.0.0.0 --debug *:8787
     command: ["sh", "-c", "/opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0"]
     depends_on:
-      - universidadesPostgres
+      - universidades-postgres
     networks:
       - datalogger_net
 
@@ -47,7 +47,7 @@ services:
     ports:
       - 5050:80
     depends_on:
-      - universidadesPostgres
+      - universidades-postgres
     networks:
       - datalogger_net
 

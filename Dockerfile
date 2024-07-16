@@ -4,7 +4,7 @@ ENV WILDFLY_PASS admin
 ENV DS_NAME myDS
 ENV DS_USER postgres
 ENV DS_PASS postgres
-ENV DS_URI jdbc:postgresql://universidadesPostgres/universidades
+ENV DS_URI jdbc:postgresql://universidades-postgres/universidades
 
 ENV JBOSS_CLI $JBOSS_HOME/bin/jboss-cli.sh
 ENV DEPLOYMENT_DIR $JBOSS_HOME/standalone/deployments/

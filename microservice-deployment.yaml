@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: wildfly-universidades
+  name: wildfly-universidades
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      io.kompose.service: wildfly-universidades
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.32.0 (HEAD)
+      labels:
+        io.kompose.network/prueba-kubernetes-datalogger-net: "true"
+        io.kompose.service: wildfly-universidades
+    spec:
+      containers:
+        - args:
+            - sh
+            - -c
+            - /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+          env:
+            - name: TZ
+              value: America/Guayaquil
+          image: sebastoledo/universidades-wildfly
+          name: wildfly-universidades
+          ports:
+            - containerPort: 8080
+              hostPort: 8080-8083
+              protocol: TCP
+            - containerPort: 8009
+              hostPort: 8899
+              protocol: TCP
+            - containerPort: 9990
+              hostPort: 9992
+              protocol: TCP
+            - containerPort: 8787
+              hostPort: 8787
+              protocol: TCP
+      hostname: wildflyuniv
+      restartPolicy: Always

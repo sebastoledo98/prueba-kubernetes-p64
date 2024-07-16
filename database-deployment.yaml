@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: universidadespostgres
+  name: universidadespostgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: universidadespostgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.32.0 (HEAD)
+      labels:
+        io.kompose.network/prueba-kubernetes-datalogger-net: "true"
+        io.kompose.service: universidadespostgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: universidades
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: TZ
+              value: America/Guayaquil
+          image: postgres
+          name: universidadespostgres
+          ports:
+            - containerPort: 5432
+              hostPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-data
+      hostname: universidades-postgres
+      restartPolicy: Always
+      volumes:
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: pg-data
