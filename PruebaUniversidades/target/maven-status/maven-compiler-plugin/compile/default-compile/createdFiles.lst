@@ -1,0 +1,8 @@
+com/web/servicios/PathBase.class
+com/web/servicios/CORSFilter.class
+com/web/servicios/ServicioUniversidad.class
+com/web/gestion/GestionUniversidad.class
+com/web/gestion/GestionDatos.class
+com/web/dao/DAOUniversidad.class
+com/web/modelo/Universidad.class
+com/web/servicios/ErrorMessage.class

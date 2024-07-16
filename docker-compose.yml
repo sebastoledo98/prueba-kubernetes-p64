@@ -1,0 +1,64 @@
+services:
+  universidadesPostgres:
+    image: postgres
+    container_name: universidadesPostgres
+    hostname: universidadesPostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: universidades
+      TZ:  America/Guayaquil
+    ports:
+      - 5432:5432
+    networks:
+      - datalogger_net
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  wildfly-universidades:
+    image: wildfly-universidades
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wildfly-universidades
+    hostname: wildflyuniv
+    environment:
+      TZ:  America/Guayaquil
+    ports:
+      - 8082:8080
+      - 8899:8009
+      - 9992:9990
+      - 8787:8787
+    #command: /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -c standalone-microprofile-jaeger.xml -bmanagement 0.0.0.0 --debug *:8787
+    command: ["sh", "-c", "/opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0"]
+    depends_on:
+      - universidadesPostgres
+    networks:
+      - datalogger_net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    hostname: pgadmin
+    environment:
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      TZ:  America/Guayaquil
+    ports:
+      - 5050:80
+    depends_on:
+      - universidadesPostgres
+    networks:
+      - datalogger_net
+
+volumes:
+  pg_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      #Cambiar con una ruta valida en el computador local
+      device: /home/tano/dataPgUniv
+
+networks:
+  datalogger_net:
